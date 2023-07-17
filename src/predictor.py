@@ -25,7 +25,7 @@ class Predictor:
         self.vocab = Seq2EditVocab(
             args.detect_vocab_path, args.correct_vocab_path)
         self.base_tokenizer = AutoTokenizer.from_pretrained(
-            args.pretrained_transformer_path, use_fast=False)
+            "roberta-base", use_fast=False)
         if bool(args.special_tokens_fix):  # for roberta
             self.base_tokenizer.add_tokens([START_TOKEN], special_tokens=True)
             self.base_tokenizer.vocab[START_TOKEN] = self.base_tokenizer.unk_token_id
@@ -56,6 +56,7 @@ class Predictor:
             # args=args, model=model, model_parameters=model.parameters())
         # ds_engine.load_checkpoint(args.model_dir, args.ckpt_id)
 
+        model.load_state_dict(torch.load(args.pretrained_transformer_path), strict=False)
         return model
 
     def handle_batch(self, full_batch):

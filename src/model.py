@@ -11,7 +11,7 @@ import os
 class SeqEncoder(nn.Module):
     def __init__(self, sub_token_mode, encoder_path, device):
         super().__init__()
-        self.matched_embedder = AutoModel.from_pretrained(encoder_path)
+        self.matched_embedder = AutoModel.from_pretrained("roberta-base")
         self.hidden_size = self.matched_embedder.config.hidden_size
         self.mismatched_embedder = MisMatchedEmbedder(device, sub_token_mode)
         self.activate_grad = True
