@@ -14,7 +14,7 @@ class Predictor:
         self.use_amp = args.amp
         print(f"amp: {self.use_amp}")
         self.fix_seed()
-        deepspeed.init_distributed()
+        # epspeed.init_distributed()
         self.device = args.device if args.device else (
             "cuda" if torch.cuda.is_available() else "cpu")
         self.iteration_count = args.iteration_count
@@ -52,11 +52,11 @@ class Predictor:
             sub_token_mode=args.sub_token_mode,
             device=self.device
         )
-        ds_engine, _, _, _ = deepspeed.initialize(
-            args=args, model=model, model_parameters=model.parameters())
-        ds_engine.load_checkpoint(args.model_dir, args.ckpt_id)
+        # ds_engine, _, _, _ = deepspeed.initialize(
+            # args=args, model=model, model_parameters=model.parameters())
+        # ds_engine.load_checkpoint(args.model_dir, args.ckpt_id)
 
-        return ds_engine
+        return model
 
     def handle_batch(self, full_batch):
         final_batch = full_batch[:]

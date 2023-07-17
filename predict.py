@@ -4,7 +4,7 @@ import re
 from argparse import ArgumentParser
 from tqdm import tqdm
 import time
-import deepspeed
+# import deepspeed
 
 
 def read_batch(path, batch_size, segmented):
@@ -96,6 +96,6 @@ if __name__ == "__main__":
     parser.add_argument("--special_tokens_fix", type=int, default=0)
     parser.add_argument("--segmented", type=int, default=0)
     parser.add_argument("--detokenize", type=int, default=0)
-    parser = deepspeed.add_config_arguments(parser)
+    # parser = deepspeed.add_config_arguments(parser)
     args = parser.parse_args()
     main(args)

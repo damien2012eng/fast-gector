@@ -1,7 +1,7 @@
 #!/bin/bash
-base_dir="/home/username/workspace"
+base_dir="/home/ec2-user/gector"
 mkdir result
-deepspeed --include localhost:0 --master_port 42991 predict.py \
+python predict.py \
     --batch_size 256 \
     --iteration_count 5 \
     --min_len 3 \
@@ -10,14 +10,12 @@ deepspeed --include localhost:0 --master_port 42991 predict.py \
     --additional_confidence 0.0 \
     --sub_token_mode "average" \
     --max_pieces_per_token 5 \
-    --model_dir $1 \
+    --model_dir ${base_dir} \
     --ckpt_id "epoch-5" \
-    --deepspeed_config "./deepspeed_config.json" \
     --detect_vocab_path "./data/vocabulary/d_tags.txt" \
     --correct_vocab_path "./data/vocabulary/labels.txt" \
-    --pretrained_transformer_path "${base_dir}/chinese-roberta-wwm-ext-large" \
-    --input_path "${base_dir}/data/track3/yaclc-minimal_testA.src" \
-    --out_path "result/yaclc-minimal_testA.preds" \
+    --pretrained_transformer_path "${base_dir}" \
+    --input_path "${base_dir}/determiners-alternatives/sents/sentences_sample_100.txt" \
+    --out_path "result/sentences_sample_100.pred" \
     --special_tokens_fix 1 \
-    --detokenize 1 \
-    --amp
+    --detokenize 1
