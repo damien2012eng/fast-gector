@@ -14,7 +14,7 @@ python predict.py \
     --ckpt_id "epoch-5" \
     --detect_vocab_path "./data/vocabulary/d_tags.txt" \
     --correct_vocab_path "./data/vocabulary/labels.txt" \
-    --pretrained_transformer_path "${base_dir}" \
+    --pretrained_transformer_path "${base_dir}/roberta_1_gectorv2.th" \
     --input_path "${base_dir}/determiners-alternatives/sents/sentences_sample_100.txt" \
     --out_path "result/sentences_sample_100.pred" \
     --special_tokens_fix 1 \
