@@ -43,7 +43,7 @@ class Predictor:
 
     def init_model(self, args):
         model = GECToRModel(
-            encoder_path=args.pretrained_transformer_path,
+            encoder_path="roberta-base",
             num_detect_tags=len(self.vocab.detect_vocab["id2tag"]),
             num_correct_tags=len(self.vocab.correct_vocab["id2tag"]),
             additional_confidence=args.additional_confidence,
@@ -60,7 +60,8 @@ class Predictor:
         # ds_engine.load_checkpoint(args.model_dir, args.ckpt_id)
 
         model.load_state_dict(torch.load(args.pretrained_transformer_path), strict=False)
-        model.to('cuda')
+        # model.to('cuda')
+
         return model
 
     def handle_batch(self, full_batch):
@@ -96,8 +97,8 @@ class Predictor:
 
     def predict(self, batch_inputs):
         with torch.no_grad():
-            for k, v in batch_inputs.items():
-                batch_inputs[k] = v.cuda()
+            # for k, v in batch_inputs.items():
+            #     batch_inputs[k] = v.cuda()
             outputs = self.model(batch_inputs)
         label_probs, label_ids = torch.max(
             outputs['class_probabilities_labels'], dim=-1)

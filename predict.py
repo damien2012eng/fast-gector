@@ -36,6 +36,8 @@ def detokenize(text: str):
 
 
 def main(args):
+    import pudb
+    pudb.set_trace()
     predictor = Predictor(args)
     total_corrections = []
     cnt_corrections = 0

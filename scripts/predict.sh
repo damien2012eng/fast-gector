@@ -2,7 +2,7 @@
 base_dir="/home/ec2-user/gector"
 mkdir result
 python predict.py \
-    --batch_size 256 \
+    --batch_size 64 \
     --iteration_count 5 \
     --min_len 3 \
     --max_len 128 \
@@ -18,5 +18,5 @@ python predict.py \
     --input_path "${base_dir}/determiners-alternatives/sents/sentences_sample_100.txt" \
     --out_path "result/sentences_sample_100.pred" \
     --special_tokens_fix 1 \
-    --detokenize 1 \
-    --segmented 1
+    --segmented 1 \
+    --device "cpu"
