@@ -18,4 +18,5 @@ python predict.py \
     --input_path "${base_dir}/determiners-alternatives/sents/sentences_sample_100.txt" \
     --out_path "result/sentences_sample_100.pred" \
     --special_tokens_fix 1 \
-    --detokenize 1
+    --detokenize 1 \
+    --segmented 1
