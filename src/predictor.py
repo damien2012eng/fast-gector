@@ -6,13 +6,11 @@ from src.dataset import Seq2EditVocab, MyCollate
 from utils.helpers import INCORRECT_LABEL, KEEP_LABEL, PAD_LABEL, START_TOKEN, UNK_LABEL, get_target_sent_by_edits
 from src.model import GECToRModel
 from random import seed
-import deepspeed
 import os
 
 class Predictor:
     def __init__(self, args):
         self.fix_seed()
-        deepspeed.init_distributed()
         self.device = args.device if args.device else (
             "cuda" if torch.cuda.is_available() else "cpu")
         self.iteration_count = args.iteration_count
@@ -23,7 +21,7 @@ class Predictor:
         self.vocab = Seq2EditVocab(
             args.detect_vocab_path, args.correct_vocab_path, unk2keep=bool(args.unk2keep))
         self.base_tokenizer = AutoTokenizer.from_pretrained(
-            args.pretrained_transformer_path, do_basic_tokenize=False)
+            args.pretrained_transformer_path, do_basic_tokenize=False, use_fast=True)
         self.base_tokenizer_vocab = self.base_tokenizer.get_vocab()
         if bool(args.special_tokens_fix):  # for roberta
             self.base_tokenizer.add_tokens([START_TOKEN], special_tokens=True)
@@ -57,12 +55,10 @@ class Predictor:
             sub_token_mode=args.sub_token_mode,
             device=self.device
         )
-        ds_engine, _, _, _ = deepspeed.initialize(
-            args=args, model=model, model_parameters=model.parameters())
-        load_dir, tag = os.path.split(args.ckpt_path)
-        ds_engine.load_checkpoint(load_dir=load_dir, tag=tag, load_module_only=True, load_optimizer_states=False, load_lr_scheduler_states=False)
-
-        return ds_engine
+        model.load_state_dict(torch.load(args.ckpt_path), strict=False)
+        model.to(self.device)
+        
+        return model
 
     def handle_batch(self, full_batch):
         final_batch = full_batch[:]

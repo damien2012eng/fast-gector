@@ -1,12 +1,11 @@
 #!/bin/bash
 pretrained_transformer_path="roberta-base"
-ckpt_path="ckpts/globalstep-xxxx"
-input_path="test.src"
-out_path="test.pred"
-mkdir result
-deepspeed --include localhost:0 --master_port 42991 predict.py \
-    --batch_size 256 \
-    --iteration_count 5 \
+ckpt_path="/home/ec2-user/gector/roberta_1_gectorv2.th"
+input_path="/home/ec2-user/fast-gector/test.src"
+out_path="/home/ec2-user/fast-gector/test.pred"
+python predict.py \
+    --batch_size 128 \
+    --iteration_count 1 \
     --min_seq_len 3 \
     --max_num_tokens 128 \
     --min_error_probability 0.0 \
@@ -14,7 +13,6 @@ deepspeed --include localhost:0 --master_port 42991 predict.py \
     --sub_token_mode "average" \
     --max_pieces_per_token 5 \
     --ckpt_path $ckpt_path \
-    --deepspeed_config "./configs/ds_config_zero1_fp16.json" \
     --detect_vocab_path "./data/vocabulary/d_tags.txt" \
     --correct_vocab_path "./data/vocabulary/labels.txt" \
     --pretrained_transformer_path $pretrained_transformer_path \
@@ -22,5 +20,4 @@ deepspeed --include localhost:0 --master_port 42991 predict.py \
     --out_path $out_path \
     --special_tokens_fix 1 \
     --detokenize 0 \
-    --segmented 1 \
-    2>&1 | tee debug.log
+    --segmented 1
